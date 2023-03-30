@@ -45,20 +45,16 @@ app.post('/extracttextfromimage', upload.single('file'), (req, res) => {
     psm: 3,
   };
 
-  
   tesseract
     .recognize(req.file.path, config)
     .then((text) => {
-    //   const regex = /^([a-zA-Z\s]+)\s+([a-zA-Z\s]+)\s+(.*)$/gm;
-      const regex = /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/gm;
-      const matches = text.split('\n').map(line => line.trim());
-    //   const matches = regex.exec(text);
-      console.log("****", matches);
+      const regex = /^([a-zA-Z\s]+)\s+([a-zA-Z\s]+)\s+(.*)$/gm;
+      const matches = regex.exec(text);
 
       const info = {
-        name: matches[2].trim(),
-        fatherName: matches[4].trim(),
-        dob: matches[6].trim(),
+        name: matches[1].trim(),
+        fatherName: matches[2].trim(),
+        dob: matches[3].trim(),
       };
 
       res.json({ info });
